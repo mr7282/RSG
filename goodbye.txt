@@ -1,1 +1,2 @@
-print("Goodbye!")
+print("Goodbye!");
+print("And you goodbye too!")
