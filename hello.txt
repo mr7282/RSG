@@ -1,1 +1,2 @@
 print("Hello world");
+print("and you hello too!")
