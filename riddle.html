@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Загадки</title>
+    <link rel=stylesheet href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Cormorant+Infant|Jura|Oswald:200,400|Russo+One&display=swap&subset=cyrillic" rel="stylesheet">
+    <script type="text/javascript">
+
+    	var ctrTrue = 0; // counter true
+		var ctrFalse = 0; // counter false// не используется, но на всякий)
+		var ctrTrueTips = 0; // counter true
+		var ctrFalseTips = 0; // counter false// не используется, но на всякий)
+		var i = 0;
+		var iTips = 0;
+		var wrong = [];
+
+		var question = ['<b>Какое колесо не крутится во время поворота?</b> <br><br>Введите правильный ответ:', '<b>Какой город носит название птицы?</b><br><br>Введите правильный ответ:','<b>Как записать "сухая трава" четырьмя буквами?</b><br><br>Введите правильный ответ:','<b>Что можно видеть закрытыми глазами?</b><br><br>Введите правильный ответ:'];
+
+		var questionTips = ['<b>Какое колесо не крутится во время поворота?</b><br>Подсказка: <i>прокол, а шиномонтаж далеко</i> <br><br>Введите правильный ответ:', '<b>Какой город носит название птицы?</b><br><br>Подсказка: <i>на гербе России</i><br><br>Введите правильный ответ:', '<b>Как записать "сухая трава" четырьмя буквами?</b><br><br>Подсказка: <i>Стог</i><br><br>Введите правильный ответ:','<b>Что можно видеть закрытыми глазами?</b><br><br>Подсказка: <i>Иногда в нём летают</i><br><br>Введите правильный ответ:'];
+
+		var answer = [
+			["Запасное" , "запасное" , "запаска" , "запасное колесо" , "Запасное колесо"],
+			["Орел" , "Орёл" , "орел" , "орёл" , "Орёл " , "орёл "],
+			["Сено" , "сено"],
+			["Сон" , "сон"]
+			];
+		
+
+		function userAnswer(){
+			return document.getElementById("userAnswer").value;
+		}
+
+		function write(text){
+			document.getElementById("info").innerHTML = text;
+		}
+
+		function write2(text){
+			document.getElementById("info2").innerHTML = text;
+		}
+
+		function hide(id) {
+			document.getElementById(id).style.display = "none";
+		}
+
+		function show(id) {
+			document.getElementById(id).style.display = ""
+		}
+		
+		function buttonText(text) {
+			document.getElementById("button").innerHTML = text;
+		}
+
+		
+		function riddleSet() {
+			write(question[i]);
+			show("userAnswer");
+			buttonText("Ответить");
+			button.setAttribute("onClick","process()");
+		}
+
+		function check(text,continuation) {
+			if (i != question.length - 1) {
+				document.getElementById("userAnswer").value = "";
+				hide("userAnswer");
+				write(text + continuation);
+				buttonText("Да");
+				button.setAttribute("onClick" , "riddleSet()");					
+			} else {
+				write(text);
+				hide("userAnswer");				
+				show("info2");
+				if (ctrTrue > 2) {
+					write2("Правильных ответов: " + ctrTrue + "<br><br>Молодец ты выйграл!");
+					hide("button");
+					show("repeat");
+					show("games");
+				} else {
+					write2("Правильных ответов: " + ctrTrue + "<br><br>Ты проиграл!<br><br>Попробовать с подсказками, но ошибаться нельзя?");
+					buttonText("Да");
+					button.setAttribute("onClick", "riddleSetTips()")
+					show("games");
+				}
+			}
+		}
+
+		function process() {
+
+			if (i < question.length) {
+				
+				if (answer[i].includes(userAnswer())) {
+					ctrTrue++;
+					check("Молодец правильно!<br><br>","Продолжим?");
+
+				} else {
+					ctrFalse++;// не используется, но на всякий)
+					wrong.push(i);
+					check("Ответ не верен!<br><br>","Продолжим?");
+				}
+				i++;
+			} 
+		}
+
+		function riddleSetTips() {
+			write(questionTips[wrong[iTips]]);
+			show("userAnswer");
+			document.getElementById("userAnswer").value = "";
+			hide("info2");
+			hide("games");
+			buttonText("Ответить");
+			button.setAttribute("onClick","processTips()");
+		}
+
+		function checkTips(text,continuation) {
+			if (iTips != wrong.length - 1) {
+				document.getElementById("userAnswer").value = "";
+				hide("userAnswer");
+				write(text + continuation);
+				buttonText("Да");
+				button.setAttribute("onClick" , "riddleSetTips()");					
+			} else {
+				write(text);
+				hide("userAnswer");				
+				show("info2");
+				if (ctrTrueTips == wrong.length) {
+					write2("Правильных ответов: " + ctrTrueTips + "<br><br>Молодец ты выйграл!");
+					hide("button");
+					show("repeat");
+					show("games");
+				} else {
+					write2("<br><br>Ты проиграл! Ты Безнадёга;)");
+					hide("button");
+					show("repeat");
+					show("games");
+				}
+			}
+		}
+
+
+
+		function processTips() {
+
+			if (iTips < wrong.length) {
+				
+				if (answer[wrong[iTips]].includes(userAnswer())) {
+					ctrTrueTips++
+					checkTips("Молодец правильно!<br><br>","Продолжим?");
+
+				} else {
+					ctrFalseTips++// не используется, но на всякий)
+					checkTips("Ответ не верен!<br><br>","Продолжим?");
+				}
+				iTips++
+			} 
+		}
+	</script>
+</head>
+
+<body onload="hide('userAnswer'), hide('repeat'), hide('games'), hide('info2')">
+    <div class="container">
+        <div class="header">
+            <ul>
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="program.html">Программы</a></li>
+                <li><a href="games.html">Игры</a></li>
+                <li><a href="article.html">Статьи</a></li>
+                <li><a href="contact.html">Контакты</a></li>
+            </ul>
+        </div>
+        <div class="content">
+            <div class="box">
+
+            	<h1>Игра в загадки</h1>
+                <br>
+                <hr>
+                <br>
+				<p id="info">Тебя приветствует игра "Загадки"!<br><br>Правила игры:<br>Больше двух правильных ответов - ты выиграл <br>Два или меньше - проиграл. <br><br>Ну что начнем?</p>
+				<br>
+				<p id="info2"></p>
+				<br>
+				<input type="text" id="userAnswer">
+				<br>
+				<a href="#" onClick="riddleSet();" id="button">Да</a>
+				<br>
+				<a href="riddle.html" onClick="" id="repeat">Заново</a>
+				<br>
+				<a href="games.html" onClick="generate();" id="games">К играм</a>
+                <br>
+                <br>
+
+            </div>
+        </div>
+        <div class="clr"></div>
+    </div>
+    <div class="footer">
+        &copy; <a href="#">ReadySteadyGo_studio</a>, 2019
+    </div>
+</body></html>
