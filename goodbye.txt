@@ -1,2 +1,0 @@
-print("Goodbye!");
-print("And you goodbye too!")

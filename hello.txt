@@ -1,4 +1,0 @@
-print("Hello world");
-print("and you hello too!");
-print("Hey man! What you fuck?");
-print("What you say?");
